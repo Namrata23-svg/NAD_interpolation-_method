@@ -1,0 +1,225 @@
+Lagrange's interpolation
+
+#include<stdio.h>
+main()
+{
+    float x[100],y[100],a,s=1,t=1,k=0;
+    int n,i,j,d=1;
+    printf("\n\n Enter the number of the terms of the table: ");
+    scanf("%d",&n);
+    printf("\n\n Enter the respective values of the variables x and y: \n");
+    for(i=0; i<n; i++)
+    {
+        scanf ("%f",&x[i]);
+        scanf("%f",&y[i]);
+    }
+    printf("\n\n The table you entered is as follows :\n\n");
+    for(i=0; i<n; i++)
+    {
+        printf("%0.3f\t%0.3f",x[i],y[i]);
+        printf("\n");
+    }
+    while(d==1)
+    {
+        printf(" \n\n\n Enter the value of the x to find the respective value of y\n\n\n");
+        scanf("%f",&a);
+        for(i=0; i<n; i++)
+        {
+            s=1;
+            t=1;
+            for(j=0; j<n; j++)
+            {
+                if(j!=i)
+                {
+                    s=s*(a-x[j]);
+                    t=t*(x[i]-x[j]);
+                }
+            }
+            k=k+((s/t)*y[i]);
+        }
+        printf("\n\n The respective value of the variable y is: %f",k);
+        printf("\n\n Do you want to continue?\n\n Press 1 to continue and any other key to exit");
+        scanf("%d",&d);
+    }
+}
+
+Divided difference table
+#include<stdio.h>
+#include<conio.h>
+ 
+void main()
+{
+    int x[10], y[10], p[10];
+    int k,f,n,i,j=1,f1=1,f2=0;
+    printf("\nEnter the number of observations:\n");
+    scanf("%d", &n);
+ 
+    printf("\nEnter the different values of x:\n");
+    for (i=1;i<=n;i++)
+        scanf("%d", &x[i]);
+ 
+    printf("\nThe corresponding values of y are:\n");
+    for (i=1;i<=n;i++)
+        scanf("%d", &y[i]);
+ 
+    f=y[1];
+    printf("\nEnter the value of 'k' in f(k) you want to evaluate:\n");
+    scanf("%d", &k);
+ 
+    do
+    {
+        for (i=1;i<=n-1;i++)
+        {
+            p[i] = ((y[i+1]-y[i])/(x[i+j]-x[i]));
+            y[i]=p[i];
+        }
+        f1=1;
+        for(i=1;i<=j;i++)
+            {
+                f1*=(k-x[i]);
+            }
+        f2+=(y[1]*f1);
+        n--;
+        j++;
+    }
+ 
+    while(n!=1);
+    f+=f2;
+    printf("\nf(%d) = %d", k , f);
+    getch();
+}
+  
+  
+  Newton backward difference
+  
+  #include<stdio.h>
+#include<conio.h>
+
+int main()
+{
+ float x[20], y[20][20];
+ int i,j, n;
+ clrscr();
+ /* Input Section */
+ printf("Enter number of data?\n");
+ scanf("%d", &n);
+ printf("Enter data:\n");
+ for(i = 0; i < n ; i++)
+ {
+  printf("x[%d]=", i);
+  scanf("%f", &x[i]);
+  printf("y[%d]=", i);
+  scanf("%f", &y[i][0]);
+ }
+
+ /* Generating Backward Difference Table */
+ for(i = 1; i < n; i++)
+ {
+  for(j = n-1; j > i-1; j--)
+  {
+   y[j][i] = y[j][i-1] - y[j-1][i-1];
+  }
+ }
+
+ /* Displaying Backward Difference Table */
+ printf("\nBACKWARD DIFFERENCE TABLE\n\n");
+ for(i = 0; i < n; i++)
+ {
+  printf("%0.2f", x[i]);
+  for(j = 0; j <= i ; j++)
+  {
+   printf("\t%0.2f", y[i][j]);
+  }
+  printf("\n");
+ }
+
+ getch(); /* Holding Screen */
+ return 0;
+}
+
+Forward difference
+  
+  #include<stdio.h>
+#include<conio.h>
+#include<math.h>
+void main()
+{
+  float x[10],y[10][10],sum,p,u,temp;
+  int i,n,j,k=0,f,m;
+  float fact(int);
+  clrscr();
+  printf("\nhow many record you will be enter: ");
+  scanf("%d",&n);
+  for(i=0; i<n; i++)
+  {
+   printf("\n\nenter the value of x%d: ",i);
+   scanf("%f",&x[i]);
+   printf("\n\nenter the value of f(x%d): ",i);
+   scanf("%f",&y[k][i]);
+  }
+
+  printf("\n\nEnter X for finding f(x): ");
+  scanf("%f",&p);
+
+  for(i=1;i<n;i++)
+  {
+    for(j=0;j<n-i;j++)
+    {
+     y[i][j]=y[i-1][j+1]-y[i-1][j];
+    }
+  }
+  printf("\n_____________________________________________________\n");
+  printf("\n  x(i)\t   y(i)\t    y1(i)    y2(i)    y3(i)    y4(i)");
+  printf("\n_____________________________________________________\n");
+  for(i=0;i<n;i++)
+  {
+    printf("\n %.3f",x[i]);
+    for(j=0;j<n-i;j++)
+    {
+     printf("   ");
+     printf(" %.3f",y[j][i]);
+    }
+   printf("\n");
+  }
+
+  i=0;
+  do
+  {
+   if(x[i]<p && p<x[i+1])
+    k=1;
+   else
+    i++;
+  }while(k != 1);
+  f=i;
+  u=(p-x[f])/(x[f+1]-x[f]);
+  printf("\n\n u = %.3f ",u);
+
+  n=n-i+1;
+  sum=0;
+  for(i=0;i<n-1;i++)
+  {
+   temp=1;
+   for(j=0;j<i;j++)
+   {
+    temp = temp * (u - j);
+   }
+    m=fact(i);
+    sum = sum + temp*(y[i][f]/m);
+  }
+  printf("\n\n f(%.2f) = %f ",p,sum);
+  getch();
+}
+
+float fact(int a)
+{
+  float fac = 1;
+
+  if (a == 0)
+   return (1);
+  else
+   fac = a * fact(a-1);
+
+  return(fac);
+}
+
+
